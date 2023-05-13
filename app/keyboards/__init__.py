@@ -6,6 +6,7 @@ class Menu:
     settings: str = '⚙️ Нашаштування'
     question: str = '💭 Питання'
     back: str = '◀️ Назад'
+    notify: str = 'Сповіщення: {}'
 
 
 class buttons:
