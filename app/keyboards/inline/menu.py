@@ -11,10 +11,10 @@ def menu_kb():
 
     inline_keyboard = [
         [InlineKeyboardButton(buttons.menu.new_subject, **button_cb('new_subject'))],
-        [InlineKeyboardButton(buttons.menu.my_subjects, **button_cb('my_subjects'))],
-        [InlineKeyboardButton(buttons.menu.my_task, **button_cb('my_task'))],
-        [InlineKeyboardButton(buttons.menu.settings, **button_cb('settings'))],
-        [InlineKeyboardButton(buttons.menu.question, **button_cb('question'))]
+        [InlineKeyboardButton(buttons.menu.my_subjects, **button_cb('my_subjects')),
+         InlineKeyboardButton(buttons.menu.my_task, **button_cb('my_task'))],
+        [InlineKeyboardButton(buttons.menu.settings, **button_cb('settings')),
+         InlineKeyboardButton(buttons.menu.question, **button_cb('question'))]
 
     ]
 
