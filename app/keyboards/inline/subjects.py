@@ -1,21 +1,33 @@
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from app.database.models import Subject
+from app.keyboards.inline.base import *
+
 
 from app.keyboards import buttons
 from app.keyboards.inline.back import back_bt
-from app.keyboards.inline.menu import menu_cb
 
 
-def my_subjects_kb():
+subject_cb = CallbackData('sb', 'subject_id', 'action')
 
-    def button_cb(actions: str):
-        return dict(callback_data=menu_cb.new(action=actions))
+
+def my_subjects_kb(subjects: list[Subject], subject_id: int):
+    subjects_ids = [subject.subject_id for subject in subjects]
+    current_subject_index = subjects_ids.index(subject_id)
+    next_subject_cb = subject_cb.new(subject_id=subjects_ids[(current_subject_index + 1) % len(subjects)], action='pag')
+    prev_subject_cb = subject_cb.new(subject_id=subjects_ids[(current_subject_index - 1) % len(subjects)], action='pag')
+
+    def button_cb(action: str, sub_id: int = subject_id):
+        return dict(callback_data=subject_cb.new(subject_id=sub_id, action=action))
 
     inline_keyboard = [
-        [InlineKeyboardButton(buttons.sub_menu.add_subject, **button_cb('add_subject')),
-         InlineKeyboardButton(buttons.sub_menu.rates, **button_cb('rates'))],
-        [InlineKeyboardButton(buttons.sub_menu.edit, **button_cb('edit')),
-         InlineKeyboardButton(buttons.sub_menu.sort, **button_cb('sort'))],
-        [back_bt()]
+        [InlineKeyboardButton(buttons.subject.add_task, **button_cb('add_task')),
+         InlineKeyboardButton(buttons.subject.rates, **button_cb('rates'))],
+        [InlineKeyboardButton(buttons.subject.edit, **button_cb('edit')),
+         InlineKeyboardButton(buttons.subject.sort, **button_cb('sort'))],
+        [
+            InlineKeyboardButton('◀', callback_data=prev_subject_cb),
+            back_bt('Назад'),
+            InlineKeyboardButton('▶', callback_data=next_subject_cb)
+        ]
     ]
 
     return InlineKeyboardMarkup(row_width=2, inline_keyboard=inline_keyboard)
