@@ -18,7 +18,7 @@ class DatabaseMiddleware(LifetimeControllerMiddleware):
         session: AsyncSession = self.session_pool()
         data['session'] = session
         data['user_db'] = UserRepo(session)
-        data['subject_repo'] = SubjectRepo(session)
+        data['subject_db'] = SubjectRepo(session)
         data['task_db'] = TaskRepo(session)
 
     async def post_process(self, obj: TelegramObject, data: dict, *args: Any):

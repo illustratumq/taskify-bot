@@ -2,8 +2,10 @@ from aiogram import Dispatcher, Bot
 from aiogram.dispatcher import FSMContext
 from aiogram.types import CallbackQuery, Message
 
+from app.database.services.repos import SubjectRepo
 from app.keyboards.inline.back import back_kb
 from app.keyboards.inline.menu import menu_cb
+from app.keyboards.inline.settings import confirm_moderate_kb
 from app.states.states import AddSubjectSG
 
 cancel_kb = back_kb('◀ Відмінити')
@@ -26,7 +28,7 @@ async def save_subject_name(msg: Message, state: FSMContext):
             'Упс, назва предмету занадто велика, максимальна к-ть символів 255, '
             f'замість {len(subject_name)}, спробуй ще раз.'
         )
-        await msg.answer(error_text, reply_markup=cancel_kb)
+        await msg.answer(error_text)
         return
     await delete_previous_message(msg, state)
     text = (
@@ -46,7 +48,7 @@ async def save_subject_description(msg: Message, state: FSMContext):
             'Упс, опис предмету занадто великий, максимальна к-ть символів 500, '
             f'замість {len(subject_description)}, спробуй ще раз.'
         )
-        await msg.answer(error_text, reply_markup=cancel_kb)
+        await msg.answer(error_text)
         return
     await delete_previous_message(msg, state)
     data = await state.get_data()
@@ -67,13 +69,13 @@ async def save_subject_grade(msg: Message, state: FSMContext):
         error_text = (
             'Упс, здаєтся це не число, спробуй ще раз.'
         )
-        await msg.answer(error_text, reply_markup=cancel_kb)
+        await msg.answer(error_text)
         return
     elif int(subject_grade) > 100:
         error_text = (
             'Упс, максимальний бал може бути від 1 до 100, спробуй ще раз.'
         )
-        await msg.answer(error_text, reply_markup=cancel_kb)
+        await msg.answer(error_text)
         return
     await delete_previous_message(msg, state)
     data = await state.get_data()
@@ -96,7 +98,7 @@ async def save_subject_tag(msg: Message, state: FSMContext):
         error_text = (
             'Упс, здаєтся цей тег занадто великий, спробуй ще раз.'
         )
-        await msg.answer(error_text, reply_markup=cancel_kb)
+        await msg.answer(error_text)
         return
     await state.update_data(tag=subject_tag)
     data = await state.get_data()
@@ -110,7 +112,23 @@ async def save_subject_tag(msg: Message, state: FSMContext):
         f'#{data["tag"]}\n\n'
         f'Якщо все окей, підтверди додавання 👇'
     )
-    await msg.answer(text, reply_markup=cancel_kb)
+    msg = await msg.answer(text, reply_markup=confirm_moderate_kb('add_subject'))
+    await AddSubjectSG.Confirm.set()
+
+
+async def create_subject_cmd(call: CallbackQuery, state: FSMContext, subject_db: SubjectRepo):
+    data = await state.get_data()
+    tag = data['tag']
+    name = data['name']
+    grade = data['grade']
+    description = data['description']
+    subject = await subject_db.add(name=name, description=description, grade=grade, tag=tag, user_id=call.from_user.id)
+    text = (
+        f'📚 [Додати предмет]\n\n'
+        f'Твій предмет {subject.name} додано ✔'
+    )
+    await call.message.edit_text(text, reply_markup=back_kb('◀ В головне меню'))
+    await state.finish()
 
 
 def setup(dp: Dispatcher):
@@ -119,6 +137,8 @@ def setup(dp: Dispatcher):
     dp.register_message_handler(save_subject_description, state=AddSubjectSG.Description)
     dp.register_message_handler(save_subject_grade, state=AddSubjectSG.Grade)
     dp.register_message_handler(save_subject_tag, state=AddSubjectSG.Tag)
+    dp.register_callback_query_handler(create_subject_cmd, menu_cb.filter(action='conf_add_subject'),
+                                       state=AddSubjectSG.Confirm)
 
 
 async def delete_previous_message(msg: Message, state: FSMContext):

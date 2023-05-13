@@ -16,6 +16,13 @@ class Subject:
     sort: str = 'Сортувати'
 
 
+class Confirm:
+    confirm: str = 'Підтвержую ✔'
+    cancel: str = 'Відмінити'
+
+
 class buttons:
     menu = Menu()
     sub_menu = Subject()
+    confirm = Confirm()
+

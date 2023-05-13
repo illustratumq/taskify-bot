@@ -18,3 +18,14 @@ def settings_kb(notify: bool):
 
     return InlineKeyboardMarkup(row_width=2, inline_keyboard=inline_keyboard)
 
+
+def confirm_moderate_kb(action: str):
+
+    inline_keyboard = [
+        [
+            InlineKeyboardButton(buttons.confirm.confirm, callback_data=menu_cb.new(action=f'conf_{action}')),
+        ],
+        [back_bt('Відмінити')]
+    ]
+
+    return InlineKeyboardMarkup(row_width=1, inline_keyboard=inline_keyboard)

@@ -6,4 +6,5 @@ class AddSubjectSG(StatesGroup):
     Description = State()
     Grade = State()
     Tag = State()
+    Confirm = State()
 

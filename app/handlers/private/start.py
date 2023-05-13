@@ -1,4 +1,5 @@
 from aiogram import Dispatcher
+from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import Message
 
@@ -6,7 +7,8 @@ from app.keyboards import buttons
 from app.keyboards.inline.menu import menu_kb
 
 
-async def start_cmd(msg: Message):
+async def start_cmd(msg: Message, state: FSMContext):
+    await state.finish()
     text = (
         f'{buttons.menu.my_subjects[0]} {buttons.menu.my_subjects.split(" ")[-1]}\n'
         'Додати або редагувати предмети\n\n'
