@@ -9,6 +9,7 @@ from aiogram.types import ParseMode, AllowedUpdates
 from app import middlewares, handlers
 from app.config import Config
 from app.database.services.db_engine import create_db_engine_and_session_pool
+from app.misc.bot_commands import set_default_commands
 
 log = logging.getLogger(__name__)
 
@@ -33,6 +34,8 @@ async def main():
     allowed_updates = (
         AllowedUpdates.MESSAGE + AllowedUpdates.CALLBACK_QUERY
     )
+
+    await set_default_commands(bot)
 
     try:
         await dp.skip_updates()

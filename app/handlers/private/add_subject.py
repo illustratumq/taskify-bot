@@ -107,7 +107,7 @@ async def save_subject_tag(msg: Message, state: FSMContext):
         f'<b>Предмет</b>: {data["name"]}\n'
         f'<b>Опис предмету:</b> {data["description"]}\n'
         f'<b>Максимальний бал:</b> {data["grade"]}\n\n'
-        f'#{data["tag"]}\n\n' #<b>Тег предмету:</b> 
+        f'#{data["tag"]}\n\n'
         f'Якщо все окей, підтверди додавання 👇'
     )
     await msg.answer(text, reply_markup=cancel_kb)

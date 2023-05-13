@@ -3,7 +3,7 @@ from aiogram.types import CallbackQuery
 
 from app.database.services.repos import UserRepo
 from app.keyboards.inline.menu import menu_cb
-from app.keyboards.inline.my_subjects import my_subjects_kb
+from app.keyboards.inline.subjects import my_subjects_kb
 
 
 async def view_subjects_cmd(call: CallbackQuery, callback_data: dict, user_db: UserRepo):
