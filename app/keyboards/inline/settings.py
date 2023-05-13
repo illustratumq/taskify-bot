@@ -5,13 +5,13 @@ from app.keyboards.inline.menu import menu_cb
 
 def settings_kb(notify: bool):
 
-    value = 'Вкл.' if notify else 'Викл.'
+    value = 'Увімкнені ✔' if notify else 'Вимкнені'
 
     def button_kb(action: str):
         return dict(callback_data=menu_cb.new(action=action))
 
     inline_keyboard = [
-        [InlineKeyboardButton(buttons.menu.notify.format(value), **button_kb('settings'))],
+        [InlineKeyboardButton(buttons.menu.notify.format(value), **button_kb('switch'))],
         [back_bt()]
 
     ]

@@ -9,7 +9,11 @@ from app.keyboards.inline.settings import settings_kb
 
 async def settings_cmd(call: CallbackQuery, callback_data: dict, user_db: UserRepo):
     user = await user_db.get_user(call.from_user.id)
-    notify = False if user.notify else True
+
+    if callback_data['action'] == 'switch':
+        notify = False if user.notify else True
+    else:
+        notify = user.notify
 
     await user_db.update_user(user.user_id, notify=notify)
 
@@ -23,3 +27,4 @@ async def settings_cmd(call: CallbackQuery, callback_data: dict, user_db: UserRe
 
 def setup(dp: Dispatcher):
     dp.register_callback_query_handler(settings_cmd, menu_cb.filter(action='settings'), state='*')
+    dp.register_callback_query_handler(settings_cmd, menu_cb.filter(action='switch'), state='*')

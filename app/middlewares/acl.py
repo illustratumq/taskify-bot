@@ -15,10 +15,10 @@ class ACLMiddleware(BaseMiddleware):
         if not msg.from_user.is_bot:
             user = await user_db.get_user(msg.from_user.id)
             if not user:
-                await user_db.add(
+                user = await user_db.add(
                     full_name=msg.from_user.full_name, mention=msg.from_user.get_mention(), user_id=msg.from_user.id
                 )
-                raise CancelHandler()
+                # raise CancelHandler()
             else:
                 values_to_update = dict()
                 if user.full_name != msg.from_user.full_name:
