@@ -1,7 +1,7 @@
 from app.keyboards.inline.base import *
 
 
-menu_cb = CallbackData('mn', 'action', 'user_id')
+menu_cb = CallbackData('mn', 'action')
 
 
 def menu_kb():
