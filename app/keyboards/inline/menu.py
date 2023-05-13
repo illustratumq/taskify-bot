@@ -10,7 +10,7 @@ def menu_kb():
         return dict(callback_data=menu_cb.new(action=action))
 
     inline_keyboard = [
-        [InlineKeyboardButton(buttons.menu.new_subject, **button_cb('new_subject'))],
+        [InlineKeyboardButton(buttons.menu.new_subject, **button_cb('add_subject'))],
         [InlineKeyboardButton(buttons.menu.my_subjects, **button_cb('my_subjects')),
          InlineKeyboardButton(buttons.menu.my_task, **button_cb('my_task'))],
         [InlineKeyboardButton(buttons.menu.settings, **button_cb('settings')),
