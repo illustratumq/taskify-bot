@@ -13,3 +13,29 @@ class UserRepo(BaseRepo[User]):
 
     async def delete_user(self, user_id: int):
         return await self.delete(self.model.user_id == user_id)
+
+
+class TaskRepo(BaseRepo[Task]):
+    model = Task
+
+    async def get_task(self, task_id: int) -> Task:
+        return await self.get_one(self.model.task_id == task_id)
+
+    async def update_task(self, task_id: int, **kwargs) -> None:
+        return await self.update(self.model.task_id == task_id, **kwargs)
+
+    async def delete_task(self, task_id: int):
+        return await self.delete(self.model.task_id == task_id)
+
+
+class SubjectRepo(BaseRepo[Subject]):
+    model = Subject
+
+    async def get_task(self, subject_id: int) -> Task:
+        return await self.get_one(self.model.subject_id == subject_id)
+
+    async def update_task(self, subject_id: int, **kwargs) -> None:
+        return await self.update(self.model.subject_id == subject_id, **kwargs)
+
+    async def delete_task(self, subject_id: int):
+        return await self.delete(self.model.subject_id == subject_id)

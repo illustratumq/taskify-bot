@@ -3,12 +3,12 @@ from aiogram.dispatcher.handler import CancelHandler
 from aiogram.dispatcher.middlewares import BaseMiddleware
 from aiogram.types import AllowedUpdates, Message, CallbackQuery, ChatType
 
-from app.database.services.enums import UserStatusEnum
 from app.database.services.repos import UserRepo
 
 
 class ACLMiddleware(BaseMiddleware):
     allowed_updates = (AllowedUpdates.MESSAGE, AllowedUpdates.CALLBACK_QUERY)
+    # TODO: greeting message text
 
     @staticmethod
     async def setup_chat(msg: Message, user_db: UserRepo) -> None:
@@ -18,8 +18,6 @@ class ACLMiddleware(BaseMiddleware):
                 await user_db.add(
                     full_name=msg.from_user.full_name, mention=msg.from_user.get_mention(), user_id=msg.from_user.id
                 )
-            elif user.status == UserStatusEnum.BANNED:
-                await msg.bot.send_message(msg.from_user.id, 'Вам обмежено доступ до даного сервісу.')
                 raise CancelHandler()
             else:
                 values_to_update = dict()

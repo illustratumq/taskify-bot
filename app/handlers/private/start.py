@@ -2,7 +2,6 @@ from aiogram import Dispatcher
 from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import Message
 
-from app.config import Config
 from app.database.services.repos import UserRepo
 
 
