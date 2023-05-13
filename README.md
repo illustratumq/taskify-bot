@@ -33,3 +33,6 @@ Scalable and straightforward template for bots written in [aiogram](https://gith
     - Debian-based distro: `sudo apt-get update -y && sudo apt-get upgrade -y && sudo apt install docker docker-compose`
 2. Run command: `sudo docker-compose up --build`
 
+
+
+pass
