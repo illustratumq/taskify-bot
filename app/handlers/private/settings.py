@@ -18,7 +18,7 @@ async def settings_cmd(call: CallbackQuery, callback_data: dict, user_db: UserRe
         'Тут ви можете включити або виключити сповіщення.'
     )
 
-    await call.message.answer(text, reply_markup=settings_kb(notify))
+    await call.message.edit_text(text, reply_markup=settings_kb(notify))
 
 
 def setup(dp: Dispatcher):
