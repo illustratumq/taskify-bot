@@ -2,7 +2,8 @@ from aiogram import Dispatcher, Bot
 from aiogram.dispatcher import FSMContext
 from aiogram.types import CallbackQuery, Message
 
-from app.database.services.repos import SubjectRepo
+from app.database.services.repos import SubjectRepo, TaskRepo
+from app.handlers.private.my_subjects import view_subjects_cmd
 from app.keyboards.inline.back import back_kb
 from app.keyboards.inline.menu import menu_cb
 from app.keyboards.inline.settings import confirm_moderate_kb
@@ -116,19 +117,20 @@ async def save_subject_tag(msg: Message, state: FSMContext):
     await AddSubjectSG.Confirm.set()
 
 
-async def create_subject_cmd(call: CallbackQuery, state: FSMContext, subject_db: SubjectRepo):
+async def create_subject_cmd(call: CallbackQuery, state: FSMContext, subject_db: SubjectRepo, task_db: TaskRepo):
     data = await state.get_data()
     tag = data['tag']
     name = data['name']
     grade = data['grade']
     description = data['description']
-    subject = await subject_db.add(name=name, description=description, grade=grade, tag=tag, user_id=call.from_user.id)
+    subject = await subject_db.add(
+        name=name, description=description, grade=grade, tag=tag, user_id=call.from_user.id)
     text = (
         f'📚 [Додати предмет]\n\n'
         f'Твій предмет {subject.name} додано ✔'
     )
-    await call.message.edit_text(text, reply_markup=back_kb('◀ В головне меню'))
-    await state.finish()
+    callback_data = dict(subject_id=subject.subject_id)
+    await view_subjects_cmd(call, callback_data, subject_db, task_db)
 
 
 def setup(dp: Dispatcher):
