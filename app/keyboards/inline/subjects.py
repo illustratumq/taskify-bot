@@ -52,6 +52,7 @@ def edit_subjects_kb(subject_id: int, subject_sorted: str):
 
 
 def sort_kb(subject_id: int, subject_sorted: str):
+
     def button_cb(action: str, sub_id: int = subject_id):
         return dict(callback_data=subject_cb.new(subject_id=sub_id, action=action, sorted=subject_sorted))
 
@@ -59,6 +60,19 @@ def sort_kb(subject_id: int, subject_sorted: str):
         [InlineKeyboardButton(buttons.sort.tags, **button_cb('tags')),
          InlineKeyboardButton(buttons.sort.deadline, **button_cb('deadline'))],
         [back_bt(to='subject', subject_id=subject_id)]
+    ]
+
+    return InlineKeyboardMarkup(row_width=2, inline_keyboard=inline_keyboard)
+
+
+def add_task_subject(subject_id: int, attribute: str):
+
+    def button_cb(action: str, sub_id: int = subject_id):
+        return dict(callback_data=subject_cb.new(subject_id=sub_id, action=action, sorted='None'))
+
+    inline_keyboard = [
+        [back_bt(to='subject', subject_id=subject_id),
+         InlineKeyboardButton(buttons.confirm.skip, **button_cb(f'skip_{attribute}'))],
     ]
 
     return InlineKeyboardMarkup(row_width=2, inline_keyboard=inline_keyboard)

@@ -3,6 +3,7 @@ from sqlalchemy.dialects.postgresql import ENUM
 
 from app.database.models.base import TimedBaseModel
 from app.database.services.enums import TaskStatusEnum
+from app.misc.times import localize, now
 
 
 class Task(TimedBaseModel):
@@ -20,3 +21,9 @@ class Task(TimedBaseModel):
             TaskStatusEnum.COMPLETE: '🟢 Виконано',
             TaskStatusEnum.WASTED: '🔴 Тобі пезда блять'
         }.get(self.status)
+
+    async def is_deadline_wasted(self, task_db):
+        check = localize(self.deadline) < now()
+        if check:
+            await task_db.update_task(self.task_id, status=TaskStatusEnum.WASTED)
+        return check

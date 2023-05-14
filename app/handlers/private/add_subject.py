@@ -125,10 +125,6 @@ async def create_subject_cmd(call: CallbackQuery, state: FSMContext, subject_db:
     description = data['description']
     subject = await subject_db.add(
         name=name, description=description, grade=grade, tag=tag, user_id=call.from_user.id)
-    text = (
-        f'📚 [Додати предмет]\n\n'
-        f'Твій предмет {subject.name} додано ✔'
-    )
     callback_data = dict(subject_id=subject.subject_id)
     await view_subjects_cmd(call, callback_data, subject_db, task_db)
 
@@ -143,9 +139,9 @@ def setup(dp: Dispatcher):
                                        state=AddSubjectSG.Confirm)
 
 
-async def delete_previous_message(msg: Message, state: FSMContext):
+async def delete_previous_message(msg: Message, state: FSMContext, chat_id: int = None):
     try:
         data = await state.get_data()
-        await msg.bot.delete_message(msg.from_user.id, data['last_msg_id'])
+        await msg.bot.delete_message(msg.from_user.id if not chat_id else chat_id, data['last_msg_id'])
     except:
         pass

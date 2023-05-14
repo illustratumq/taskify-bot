@@ -14,3 +14,9 @@ class EditSubjectSG(StatesGroup):
     Description = State()
     Grade = State()
 
+
+class AddTaskSG(StatesGroup):
+    Name = State()
+    Description = State()
+    Deadline = State()
+    Confirm = State()

@@ -19,6 +19,7 @@ class Subject:
 class Confirm:
     confirm: str = 'Підтвержую ✔'
     cancel: str = 'Відмінити'
+    skip: str = 'Пропустити'
 
 
 class EditSubject:

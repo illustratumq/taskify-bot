@@ -2,7 +2,7 @@ from aiogram import Dispatcher
 from aiogram.types import CallbackQuery
 
 from app.database.services.enums import TaskStatusEnum
-from app.database.services.repos import UserRepo, SubjectRepo, TaskRepo
+from app.database.services.repos import SubjectRepo, TaskRepo
 from app.keyboards import buttons
 from app.keyboards.inline.menu import menu_cb
 from app.keyboards.inline.subjects import my_subjects_kb, subject_cb
@@ -56,7 +56,7 @@ def create_tasks_list(tasks: list[TaskRepo.model]):
     text = ''
     if not tasks:
         return 'Немає завдань'
-    tasks += '\n'
+    text += '\n'
     for task, num in zip(tasks, range(1, len(tasks) + 1)):
         marker = ' ✔' if task.status == TaskStatusEnum.COMPLETE else ''
         text += f'  {num}. {task.name}{marker}\n'
