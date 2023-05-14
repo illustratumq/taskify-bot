@@ -3,6 +3,7 @@ import logging
 
 import betterlogging as bl
 from aiogram import Bot, Dispatcher
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
 from aiogram.types import ParseMode, AllowedUpdates
 
@@ -19,7 +20,7 @@ async def main():
     bl.basic_colorized_config(level=config.misc.log_level)
     log.info('Бот запущенно...')
 
-    storage = RedisStorage2(host=config.redis.host, port=config.redis.port)
+    storage = MemoryStorage()  # RedisStorage2(host=config.redis.host, port=config.redis.port)
     bot = Bot(config.bot.token, parse_mode=ParseMode.HTML)
     dp = Dispatcher(bot, storage=storage)
     db_engine, sqlalchemy_session_pool = await create_db_engine_and_session_pool(

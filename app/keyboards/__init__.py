@@ -21,8 +21,17 @@ class Confirm:
     cancel: str = 'Відмінити'
 
 
+class EditSubject:
+    edit_name: str = 'Редагувати назву'
+    edit_max_score: str = 'Редагувати макс. бал'
+    edit_description: str = 'Редагувати опис'
+    extra_score: str = 'Додатковий бал'
+    delete_subject: str = 'Видалити предмет'
+
+
 class buttons:
     menu = Menu()
     subject = Subject()
     confirm = Confirm()
+    edit_subject = EditSubject()
 
