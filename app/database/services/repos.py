@@ -33,12 +33,14 @@ class TaskRepo(BaseRepo[Task]):
 
 class SubjectRepo(BaseRepo[Subject]):
     model = Subject
-
     async def get_subject(self, subject_id: int) -> Subject:
         return await self.get_one(self.model.subject_id == subject_id)
 
     async def get_subject_user(self, user_id: int) -> list[Subject]:
         return await self.get_all(self.model.user_id == user_id)
+
+    async def get_tag_user(self, user_id: int, tag: int) -> list[Subject]:
+        return await self.get_all(self.model.tag == tag, self.model.user_id == user_id)
 
     async def update_subject(self, subject_id: int, **kwargs) -> None:
         return await self.update(self.model.subject_id == subject_id, **kwargs)

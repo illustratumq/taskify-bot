@@ -19,6 +19,8 @@ async def view_subjects_cmd(call: CallbackQuery, callback_data: dict, subject_db
     subject_id = int(callback_data['subject_id']) if 'subject_id' in callback_data.keys() else subjects[0].subject_id
     subject_sorted = callback_data['sorted'] if 'sorted' in callback_data.keys() else 'None'
 
+    print(callback_data)
+
     text = (
         f'{buttons.menu.my_subjects[0]} [Мої предмети]\n\n'
         f'{create_subjects_list(subjects, subject_id)}\n'
@@ -33,10 +35,10 @@ def setup(dp: Dispatcher):
     dp.register_callback_query_handler(view_subjects_cmd, subject_cb.filter(action='pag'), state='*')
 
 
-def create_subjects_list(subjects: list[SubjectRepo.model], subject_id: int):
+def create_subjects_list(subjects: list[SubjectRepo.model], subject_id: int, is_tag: bool = True):
     text = ''
     for subject, num in zip(subjects, range(1, len(subjects) + 1)):
-        brackets = ('<b>[', f']</b> #{subject.tag}') if subject.subject_id == subject_id else ('', '')
+        brackets = ('<b>[', f']</b> {"#" + subject.tag if is_tag else ""}') if subject.subject_id == subject_id else ('', '')
         text += f'{num}. {brackets[0]}{subject.name}{brackets[-1]}\n'
     return text
 
