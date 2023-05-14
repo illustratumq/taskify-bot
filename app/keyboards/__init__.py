@@ -29,9 +29,16 @@ class EditSubject:
     delete_subject: str = 'Видалити предмет'
 
 
+class Sort:
+    tags: str = 'По тегам'
+    deadline: str = 'По дедлайнам'
+
+
 class buttons:
     menu = Menu()
     subject = Subject()
     confirm = Confirm()
     edit_subject = EditSubject()
+    sort = Sort()
+
 

@@ -11,8 +11,8 @@ from app.keyboards.inline.subjects import my_subjects_kb, subject_cb
 async def view_subjects_cmd(call: CallbackQuery, callback_data: dict, subject_db: SubjectRepo, task_db: TaskRepo):
     subjects = await subject_db.get_subject_user(call.from_user.id)
     subjects.sort(key=lambda s: s.created_at)
-
     subject_id = int(callback_data['subject_id']) if 'subject_id' in callback_data.keys() else subjects[0].subject_id
+    subject_sorted = callback_data['sorted'] if 'sorted' in callback_data.keys() else 'None'
 
     text = (
         f'{buttons.menu.my_subjects[0]} [Мої предмети]\n\n'
@@ -20,7 +20,7 @@ async def view_subjects_cmd(call: CallbackQuery, callback_data: dict, subject_db
         f'{await create_subject_text(subject_id, subject_db, task_db)}'
     )
 
-    await call.message.edit_text(text, reply_markup=my_subjects_kb(subjects, subject_id))
+    await call.message.edit_text(text, reply_markup=my_subjects_kb(subjects, subject_id, subject_sorted))
 
 
 def setup(dp: Dispatcher):

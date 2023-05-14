@@ -4,17 +4,20 @@ from app.keyboards.inline.base import *
 from app.keyboards import buttons
 from app.keyboards.inline.back import back_bt
 
-subject_cb = CallbackData('sb', 'subject_id', 'action')
+
+subject_cb = CallbackData('sb', 'subject_id', 'action', 'sorted')
 
 
-def my_subjects_kb(subjects: list[Subject], subject_id: int):
+def my_subjects_kb(subjects: list[Subject], subject_id: int, sorted: str):
     subjects_ids = [subject.subject_id for subject in subjects]
     current_subject_index = subjects_ids.index(subject_id)
-    next_subject_cb = subject_cb.new(subject_id=subjects_ids[(current_subject_index + 1) % len(subjects)], action='pag')
-    prev_subject_cb = subject_cb.new(subject_id=subjects_ids[(current_subject_index - 1) % len(subjects)], action='pag')
+    next_subject_cb = subject_cb.new(subject_id=subjects_ids[(current_subject_index + 1) % len(subjects)], action='pag',
+                                     sorted=sorted)
+    prev_subject_cb = subject_cb.new(subject_id=subjects_ids[(current_subject_index - 1) % len(subjects)], action='pag',
+                                     sorted=sorted)
 
     def button_cb(action: str, sub_id: int = subject_id):
-        return dict(callback_data=subject_cb.new(subject_id=sub_id, action=action))
+        return dict(callback_data=subject_cb.new(subject_id=sub_id, action=action, sorted=sorted))
 
     inline_keyboard = [
         [InlineKeyboardButton(buttons.subject.add_task, **button_cb('add_task')),
@@ -31,6 +34,7 @@ def my_subjects_kb(subjects: list[Subject], subject_id: int):
     return InlineKeyboardMarkup(row_width=2, inline_keyboard=inline_keyboard)
 
 
+
 def edit_subjects_kb(subject_id):
     def button_cb(action: str, sub_id: int = subject_id):
         return dict(callback_data=subject_cb.new(subject_id=sub_id, action=action))
@@ -41,6 +45,17 @@ def edit_subjects_kb(subject_id):
         [InlineKeyboardButton(buttons.edit_subject.edit_description, **button_cb('edit_description')),
          InlineKeyboardButton(buttons.edit_subject.extra_score, **button_cb('extra_score'))],
         [InlineKeyboardButton(buttons.edit_subject.delete_subject, **button_cb('delete_subject'))]
+    ]
+
+
+def sort_kb(subject_id: int, subject_sorted: str):
+    def button_cb(action: str, sub_id: int = subject_id):
+        return dict(callback_data=subject_cb.new(subject_id=sub_id, action=action, sorted=subject_sorted))
+
+    inline_keyboard = [
+        [InlineKeyboardButton(buttons.sort.tags, **button_cb('tags')),
+         InlineKeyboardButton(buttons.sort.deadline, **button_cb('deadline'))],
+        [back_bt('Назад')]
     ]
 
     return InlineKeyboardMarkup(row_width=2, inline_keyboard=inline_keyboard)

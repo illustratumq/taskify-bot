@@ -8,7 +8,8 @@ from app.handlers.private import (
     my_subjects,
     add_subject,
     edit_subject,
-    add_task
+    add_task,
+    sort
 )
 
 
@@ -21,5 +22,8 @@ def setup(dp: Dispatcher):
     add_subject.setup(dp)
     edit_subject.setup(dp)
     add_task.setup(dp)
+    sort.setup(dp)
+
+
 
 
