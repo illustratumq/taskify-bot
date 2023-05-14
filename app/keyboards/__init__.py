@@ -23,9 +23,9 @@ class Confirm:
 
 class EditSubject:
     edit_name: str = 'Редагувати назву'
-    edit_max_score: str = 'Редагувати макс. бал'
+    edit_max_grade: str = 'Редагувати макс. бал'
     edit_description: str = 'Редагувати опис'
-    extra_score: str = 'Додатковий бал'
+    extra_grade: str = '➕ Додатковий бал'
     delete_subject: str = 'Видалити предмет'
 
 
