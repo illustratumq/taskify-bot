@@ -8,3 +8,9 @@ class AddSubjectSG(StatesGroup):
     Tag = State()
     Confirm = State()
 
+
+class EditSubjectSG(StatesGroup):
+    Name = State()
+    Description = State()
+    Grade = State()
+
